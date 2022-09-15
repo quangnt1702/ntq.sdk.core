@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>NTQ.Sdk.Core</id>
+    <version>1.0.0</version>
+    <authors>NTQ.Sdk.Core</authors>
+    <description>Package Description</description>
+    <dependencies>
+      <group targetFramework="net5.0">
+        <dependency id="System.Linq.Dynamic.Core" version="1.2.19" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="D:\MyWorkSpace\NTQ.Sdk.Core\NTQ.Sdk.Core\bin\Debug\net5.0\NTQ.Sdk.Core.dll" target="lib\net5.0\NTQ.Sdk.Core.dll" />
+  </files>
+</package>

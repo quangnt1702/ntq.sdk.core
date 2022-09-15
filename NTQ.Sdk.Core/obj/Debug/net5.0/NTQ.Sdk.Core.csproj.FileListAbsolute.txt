@@ -1,0 +1,12 @@
+D:\MyWorkSpace\NTQ.Sdk.Core\NTQ.Sdk.Core\bin\Debug\net5.0\NTQ.Sdk.Core.deps.json
+D:\MyWorkSpace\NTQ.Sdk.Core\NTQ.Sdk.Core\bin\Debug\net5.0\NTQ.Sdk.Core.dll
+D:\MyWorkSpace\NTQ.Sdk.Core\NTQ.Sdk.Core\bin\Debug\net5.0\ref\NTQ.Sdk.Core.dll
+D:\MyWorkSpace\NTQ.Sdk.Core\NTQ.Sdk.Core\bin\Debug\net5.0\NTQ.Sdk.Core.pdb
+D:\MyWorkSpace\NTQ.Sdk.Core\NTQ.Sdk.Core\obj\Debug\net5.0\NTQ.Sdk.Core.csproj.AssemblyReference.cache
+D:\MyWorkSpace\NTQ.Sdk.Core\NTQ.Sdk.Core\obj\Debug\net5.0\NTQ.Sdk.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\MyWorkSpace\NTQ.Sdk.Core\NTQ.Sdk.Core\obj\Debug\net5.0\NTQ.Sdk.Core.AssemblyInfoInputs.cache
+D:\MyWorkSpace\NTQ.Sdk.Core\NTQ.Sdk.Core\obj\Debug\net5.0\NTQ.Sdk.Core.AssemblyInfo.cs
+D:\MyWorkSpace\NTQ.Sdk.Core\NTQ.Sdk.Core\obj\Debug\net5.0\NTQ.Sdk.Core.csproj.CoreCompileInputs.cache
+D:\MyWorkSpace\NTQ.Sdk.Core\NTQ.Sdk.Core\obj\Debug\net5.0\NTQ.Sdk.Core.dll
+D:\MyWorkSpace\NTQ.Sdk.Core\NTQ.Sdk.Core\obj\Debug\net5.0\ref\NTQ.Sdk.Core.dll
+D:\MyWorkSpace\NTQ.Sdk.Core\NTQ.Sdk.Core\obj\Debug\net5.0\NTQ.Sdk.Core.pdb

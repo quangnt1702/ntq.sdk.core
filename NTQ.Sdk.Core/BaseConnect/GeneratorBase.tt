@@ -1,0 +1,98 @@
+<#@ template language="C#" hostspecific="true"#>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension="cs" #>
+<#
+    var files = GetCsvFileNames();
+    var enumerable = files.ToList();
+    foreach (var file in enumerable.Where(w => !w.EndsWith("Context")))
+    {
+#>
+/////////////////////////////////////////////////////////////////
+//
+//              AUTO-GENERATED
+//
+/////////////////////////////////////////////////////////////////
+
+using Microsoft.EntityFrameworkCore;
+using ClinicManagement.DataAccess.BaseConnect;
+using ClinicManagement.DataAccess.Models;
+
+namespace ClinicManagement.BusinessLogic.Generations.Repositories {
+
+    public partial interface I<#= file #>Repository :IBaseRepository<<#= file #>>
+    {
+    }
+    public partial class <#= file #>Repository :BaseRepository<<#= file #>>, I<#= file #>Repository
+    {
+         public <#= file #>Repository(DbContext dbContext) : base(dbContext)
+         {
+         }
+    }
+}
+
+<#
+        // End of file.
+        SaveOutput(file + "Repository.cs", "Repositories");
+    }
+#>
+
+
+/////////////////////////////////////////////////////////////////
+//
+//              AUTO-GENERATED
+//
+/////////////////////////////////////////////////////////////////
+
+using ClinicManagement.DataAccess.Models;
+using Microsoft.Extensions.DependencyInjection;
+using ClinicManagement.BusinessLogic.Services;
+using ClinicManagement.BusinessLogic.Generations.Repositories;
+using Microsoft.EntityFrameworkCore;
+using ClinicManagement.DataAccess.BaseConnect;
+namespace ClinicManagement.BusinessLogic.Generations.DependencyInjection
+{
+    public static class DependencyInjectionResolverGen
+    {
+        public static void InitializerDependencyInjection(this IServiceCollection services)
+        {
+            services.AddScoped<DbContext, <#=
+                enumerable.FirstOrDefault(f => f.EndsWith("Context")) #>>();
+        <#
+    foreach (string item in enumerable.Where(w => !w.EndsWith("Context")))
+    {
+#>
+            services.AddScoped<I<#= item #>Repository, <#= item #>Repository>();
+        <#
+    }
+#>
+}
+    }
+}
+<#
+    SaveOutput("DependencyInjectionResolverGen.cs", "DependencyInjection");
+#>
+
+
+<#+
+    private void SaveOutput(string outputFileName, string folder)
+    {
+        string templateDirectory = Path.GetDirectoryName(Host.TemplateFile);
+        if (!Directory.Exists(Path.Combine(templateDirectory ?? string.Empty, folder)))
+        {
+            Directory.CreateDirectory(Path.Combine(templateDirectory ?? string.Empty, folder));
+        }
+        string outputFilePath = Path.Combine(templateDirectory ?? string.Empty, folder, outputFileName);
+        File.WriteAllText(outputFilePath, this.GenerationEnvironment.ToString());
+        GenerationEnvironment.Clear();
+    }
+
+    private IEnumerable<string> GetCsvFileNames()
+    {
+        var currentPath = Host.ResolvePath(string.Empty);
+        var path = Path.Combine(currentPath, @"..\..\ClinicManagement.DataAccess\Models");
+        return Directory.GetFiles(path, "*.cs").Select(s => new FileInfo(s).Name.Replace(".cs", ""));
+    }
+#>

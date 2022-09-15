@@ -1,0 +1,221 @@
+<#
+    //TO USE THIS FILE INSTALL "NTQ.Sdk.Core" NUGET PACKAGE
+#>
+<#@ template language="C#" hostspecific="true"#>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension="cs" #>
+<#
+            var files = GetCsvFileNames();
+            var enumerable = files.ToList();
+            
+            //GENERATE REPOSITORY
+            foreach (var file in enumerable.Where(w => !w.EndsWith("Context")))
+            {
+#>
+/////////////////////////////////////////////////////////////////
+//
+//              AUTO-GENERATED | DON'T CHANGE
+//
+/////////////////////////////////////////////////////////////////
+
+using Microsoft.EntityFrameworkCore;
+using NTQ.Sdk.Core.BaseConnect;
+using CoOrder.DataAccess.Models;
+
+namespace CoOrder.BusinessLogic.Generations.Repositories 
+{
+
+    public partial interface I<#= file #>Repository :IBaseRepository<<#= file #>>
+    {
+    }
+    public partial class <#= file #>Repository :BaseRepository<<#= file #>>, I<#= file #>Repository
+    {
+         public <#= file #>Repository(DbContext dbContext) : base(dbContext)
+         {
+         }
+    }
+}
+
+<#
+                // End of file.
+                SaveOutput(file + "Repository.cs", "Repositories");
+            }
+#>
+<#
+            //GENERATE SERVICE
+            foreach (var file in enumerable.Where(w => !w.EndsWith("Context")))
+            {
+#>
+using CoOrder.BusinessLogic.Generations.Repositories;
+
+namespace CoOrder.BusinessLogic.Services 
+{
+
+    public interface I<#= file #>Service {
+    
+    }
+
+    public class <#= file #>Service : I<#= file #>Service {
+
+      private readonly I<#= file #>Repository _<#= file.ToLower() #>Repository;
+
+        public <#= file #>Service(I<#= file #>Repository <#= file.ToLower() #>Repository)
+        {
+            _<#= file.ToLower() #>Repository = <#= file.ToLower() #>Repository;
+        }
+
+    }
+
+}
+<#
+                // End of file.
+                SaveOutput(file + "Service.cs", "../Services");
+            }
+#>
+<#
+            //GENERATE VIEW MODEL
+            foreach (var file in enumerable.Where(w => !w.EndsWith("Context")))
+            {
+#>
+
+namespace CoOrder.BusinessLogic.ViewModels 
+{
+
+    public class <#= file #>ViewModel {
+    
+    }
+
+}
+<#
+                // End of file.
+                SaveOutput(file + "ViewModel.cs", "../ViewModels");
+            }
+#>
+<#
+            //GENERATE CREATE REQUEST MODEL
+            foreach (var file in enumerable.Where(w => !w.EndsWith("Context")))
+            {
+#>
+
+namespace CoOrder.BusinessLogic.RequestModels.<#= file #> 
+{
+
+   public  class Create<#= file #>RequestModel {
+     
+   }
+
+}
+<#
+                // End of file.
+                SaveOutput("Create" + file + "RequestModel.cs", "../RequestModels/" + file);
+            }
+#>
+<#
+            //GENERATE UPDATE REQUEST MODEL
+            foreach (var file in enumerable.Where(w => !w.EndsWith("Context")))
+            {
+#>
+
+namespace CoOrder.BusinessLogic.RequestModels.<#= file #> 
+{
+
+   public  class Update<#= file #>RequestModel {
+     
+   }
+
+}
+<#
+                // End of file.
+                SaveOutput("Update" + file + "RequestModel.cs", "../RequestModels/" + file);
+            }
+#><#
+            //GENERATE AUTOMAPPER MODULE
+            foreach (var file in enumerable.Where(w => !w.EndsWith("Context")))
+            {
+#>
+using AutoMapper;
+using CoOrder.BusinessLogic.RequestModels.<#= file #>;
+using CoOrder.BusinessLogic.ViewModels;
+using CoOrder.DataAccess.Models;
+
+
+namespace CoOrder.BusinessLogic.AutoMapperModule 
+{
+
+   public static class <#= file #>Module
+    {
+        public static void Config<#= file #>Module(this IMapperConfigurationExpression mc)
+        {
+            mc.CreateMap<<#= file #>, <#= file #>ViewModel>().ReverseMap();
+            mc.CreateMap<<#= file #>, Create<#= file #>RequestModel>().ReverseMap();
+            mc.CreateMap<<#= file #>, Update<#= file #>RequestModel>().ReverseMap();
+        }
+    }
+
+}
+<#
+                // End of file.
+                SaveOutput(file + "Module.cs", "../AutoMapperModule");
+            }
+#>
+/////////////////////////////////////////////////////////////////
+//
+//              AUTO-GENERATED | DON'T CHANGE
+//
+/////////////////////////////////////////////////////////////////
+
+using CoOrder.DataAccess.Models;
+using Microsoft.Extensions.DependencyInjection;
+using CoOrder.BusinessLogic.Services;
+using CoOrder.BusinessLogic.Generations.Repositories;
+using Microsoft.EntityFrameworkCore;
+
+namespace CoOrder.BusinessLogic.Generations.DependencyInjection
+{
+    public static class DependencyInjectionResolverGen
+    {
+        public static void InitializerDependencyInjection(this IServiceCollection services)
+        {
+            services.AddScoped<DbContext, <#=
+                enumerable.FirstOrDefault(f => f.EndsWith("Context")) #>>();
+        <#
+            foreach (string item in enumerable.Where(w => !w.EndsWith("Context")))
+            {
+#>
+
+            services.AddScoped<I<#= item #>Service, <#= item #>Service>();
+            services.AddScoped<I<#= item #>Repository, <#= item #>Repository>();
+        <#
+            }
+#>
+}
+    }
+}
+<#
+            SaveOutput("DependencyInjectionResolverGen.cs", "DependencyInjection");
+#>
+
+
+<#+
+    private void SaveOutput(string outputFileName, string folder)
+    {
+        string templateDirectory = Path.GetDirectoryName(Host.TemplateFile);
+        if (!Directory.Exists(Path.Combine(templateDirectory ?? string.Empty, folder)))
+        {
+            Directory.CreateDirectory(Path.Combine(templateDirectory ?? string.Empty, folder));
+        }
+        string outputFilePath = Path.Combine(templateDirectory ?? string.Empty, folder, outputFileName);
+        File.WriteAllText(outputFilePath, this.GenerationEnvironment.ToString());
+        GenerationEnvironment.Clear();
+    }
+
+    private IEnumerable<string> GetCsvFileNames()
+    {
+        var currentPath = Host.ResolvePath(string.Empty);
+        var path = Path.Combine(currentPath, @"..\..\CoOrder.DataAccess\Models");
+        return Directory.GetFiles(path, "*.cs").Select(s => new FileInfo(s).Name.Replace(".cs", ""));
+    }
+#>
