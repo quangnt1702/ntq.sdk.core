@@ -5,7 +5,7 @@ namespace NTQ.Sdk.Core.Extensions
 {
     public static class ErrorHandlingFilterConfig
     {
-        public static void ConfigErrorHandlingFilter(this IServiceCollection services)
+        public static void ConfigureErrorHandlingFilter(this IServiceCollection services)
         {
             services.AddControllers(options => options.Filters.Add<ErrorHandlingFilter>());
         }

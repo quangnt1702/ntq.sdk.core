@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <PackageVersion>1.0.6</PackageVersion>
+        <PackageVersion>1.0.7</PackageVersion>
         <Authors>QuangNT</Authors>
         <PackageIcon>NTQ-Logo.png</PackageIcon>
     </PropertyGroup>
