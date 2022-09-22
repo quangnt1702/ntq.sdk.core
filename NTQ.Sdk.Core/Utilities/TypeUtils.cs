@@ -16,11 +16,24 @@ namespace NTQ.Sdk.Core.Utilities
                 if (propertyInfo.CustomAttributes.Any(
                         (Func<CustomAttributeData, bool>)(x => x.AttributeType == typeof(HiddenAttribute))))
                 {
-                    if (propertyInfo.PropertyType.FullName != null && !propertyInfo.PropertyType.FullName.Contains("System") && propertyInfo.PropertyType.GetProperties().Length > 0)
+                    if (propertyInfo.PropertyType.FullName != null &&
+                        !propertyInfo.PropertyType.FullName.Contains("System") &&
+                        propertyInfo.PropertyType.GetProperties().Length > 0)
                     {
                         foreach (PropertyInfo propertyChild in propertyInfo.PropertyType.GetProperties())
                         {
                             listPropertiesName.Add(propertyInfo.Name + "." + propertyChild.Name);
+
+                            if (propertyChild.PropertyType.FullName != null &&
+                                !propertyChild.PropertyType.FullName.Contains("System") &&
+                                propertyChild.PropertyType.GetProperties().Length > 0)
+                            {
+                                foreach (PropertyInfo propertyChildChild in propertyChild.PropertyType.GetProperties())
+                                {
+                                    listPropertiesName.Add(propertyInfo.Name + "." + propertyChild.Name + "." +
+                                                           propertyChildChild.Name);
+                                }
+                            }
                         }
                     }
 

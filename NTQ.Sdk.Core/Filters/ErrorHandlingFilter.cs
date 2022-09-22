@@ -1,10 +1,11 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace NTQ.Sdk.Core.Filters
 {
-    public class ErrorHandlingFilter : IExceptionFilter
+    public class ErrorHandlingFilter: IExceptionFilter
     {
         public void OnException(ExceptionContext context)
         {
@@ -16,27 +17,19 @@ namespace NTQ.Sdk.Core.Filters
                 context.Result = new JsonResult(exception.Error);
                 return;
             }
-#if DEBUG
-            context.Result = new ObjectResult(new ErrorResponse()
+
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
             {
-                Error =
-                {
-                    StatusCode = (int)HttpStatusCode.InternalServerError,
-                    ErrorCode = 500,
-                    Message = context.Exception.StackTrace
-                }
-            });
-#else
-            context.Result = new ObjectResult(new ErrorResponse()
+                context.Result = new ObjectResult(new ErrorResponse((int)HttpStatusCode.InternalServerError, 500,
+                    context.Exception.InnerException?.ToString()));
+                context.ExceptionHandled = true;
+            }
+            else
             {
-                Error =
-                {
-                    StatusCode = (int)HttpStatusCode.InternalServerError,
-                    ErrorCode = 500,
-                    Message = "Opps, something went wrong!"
-                }
-            });
-#endif
+                context.Result = new ObjectResult(new ErrorResponse((int)HttpStatusCode.InternalServerError, 500,
+                    "Oops! something went wrong!"));
+                context.ExceptionHandled = true;
+            }
         }
     }
 }
