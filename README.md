@@ -4,6 +4,8 @@
 
 `NTQ.Sdk.Core` is a support library that provides methods, utils, extensions for coding more effectively.
 
+<img src="./NTQ.Sdk.Core/NTQ-Logo.png" style=" width:150px ; height:150px "  >
+
 ## Features
 
 - Dynamic filter
