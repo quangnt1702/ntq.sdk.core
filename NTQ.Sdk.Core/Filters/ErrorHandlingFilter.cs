@@ -21,7 +21,7 @@ namespace NTQ.Sdk.Core.Filters
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
             {
                 context.Result = new ObjectResult(new ErrorResponse((int)HttpStatusCode.InternalServerError, 500,
-                    context.Exception.InnerException?.ToString()));
+                    context.Exception.Message?.ToString()));
                 context.ExceptionHandled = true;
             }
             else
