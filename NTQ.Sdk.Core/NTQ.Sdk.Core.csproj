@@ -2,9 +2,10 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <PackageVersion>1.1.3</PackageVersion>
+        <PackageVersion>1.1.5</PackageVersion>
         <Authors>QuangNT</Authors>
         <PackageIcon>NTQ-Logo.png</PackageIcon>
+        <RepositoryUrl>https://github.com/quangnt1702/ntq.sdk.core</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>

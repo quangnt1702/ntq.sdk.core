@@ -61,10 +61,12 @@ namespace CoOrder.BusinessLogic.Services
     public class <#= file #>Service : I<#= file #>Service {
 
       private readonly I<#= file #>Repository _<#= file.ToLower() #>Repository;
+      private readonly IMapper _mapper;
 
-        public <#= file #>Service(I<#= file #>Repository <#= file.ToLower() #>Repository)
+        public <#= file #>Service(I<#= file #>Repository <#= file.ToLower() #>Repository, IMapper mapper)
         {
             _<#= file.ToLower() #>Repository = <#= file.ToLower() #>Repository;
+            _mapper = mapper;
         }
 
     }

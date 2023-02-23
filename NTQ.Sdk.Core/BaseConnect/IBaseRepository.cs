@@ -35,7 +35,7 @@ namespace NTQ.Sdk.Core.BaseConnect
         Task AddRangeAsync(IEnumerable<TEntity> entities);
         void RemoveRange(IEnumerable<TEntity> entities);
         void Save();
-        void SaveAsync();
+        Task SaveAsync();
         void Dispose();
     }
 }

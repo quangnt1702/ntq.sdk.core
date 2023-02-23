@@ -38,7 +38,7 @@ namespace NTQ.Sdk.Core.BaseConnect
             }
 
             foreach (var includeProperty in includeProperties.Split
-                         (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                         (new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
                 query = query.Include(includeProperty);
             }
@@ -138,9 +138,9 @@ namespace NTQ.Sdk.Core.BaseConnect
             _dbContext.SaveChanges();
         }
 
-        public void SaveAsync()
+        public async Task SaveAsync()
         {
-            _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         private void Dispose(bool disposing)

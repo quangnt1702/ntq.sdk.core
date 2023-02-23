@@ -18,7 +18,31 @@ namespace NTQ.Sdk.Core.Utilities
             {
                 displayName = enumValue.ToString();
             }
+
             return displayName;
+        }
+
+        /// <summary>
+        /// Return true when enum not include enumName
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="enumName"></param>
+        /// <returns></returns>
+        public static bool CheckValidEnums(Type type, string enumName)
+        {
+            return Enum.GetNames(type)
+                .SingleOrDefault(x => x.Equals(enumName)) == null;
+        }
+
+        /// <summary>
+        /// Return true when enum not include enumName
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="enumValue"></param>
+        /// <returns></returns>
+        public static bool CheckValidEnums(Type type, int enumValue)
+        {
+            return Enum.IsDefined(type, enumValue);
         }
     }
 }
