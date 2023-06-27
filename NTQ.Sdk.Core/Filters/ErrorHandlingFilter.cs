@@ -1,11 +1,11 @@
-﻿using System;
-using System.Net;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System;
+using System.Net;
 
 namespace NTQ.Sdk.Core.Filters
 {
-    public class ErrorHandlingFilter: IExceptionFilter
+    public class ErrorHandlingFilter : IExceptionFilter
     {
         public void OnException(ExceptionContext context)
         {
@@ -22,12 +22,14 @@ namespace NTQ.Sdk.Core.Filters
             {
                 context.Result = new ObjectResult(new ErrorResponse((int)HttpStatusCode.InternalServerError, 500,
                     context.Exception.Message?.ToString()));
+                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 context.ExceptionHandled = true;
             }
             else
             {
                 context.Result = new ObjectResult(new ErrorResponse((int)HttpStatusCode.InternalServerError, 500,
                     "Oops! something went wrong!"));
+                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 context.ExceptionHandled = true;
             }
         }
